@@ -4,7 +4,7 @@
       <template v-slot:title>
         <v-card-title>
           {{ node.name }}
-          <span style="" class="font-weight-light text-subtitle-2 text-grey">({{ node.ip}})</span>
+          <span style="" class="font-weight-light text-subtitle-2 text-grey">({{ node.name}})</span>
         </v-card-title>
       </template>
 
@@ -73,12 +73,13 @@ const emit = defineEmits<{
   (e: 'notify', message: string, color: string): void
 }>()
 
-async function pingNode(ip: string) {
-  const result = await useApiCall(`http://${ip}:8082/node/ping`, 'get')
+async function pingNode(name: string) {
+  const apiUrl = `/${name}/node/ping`;
+  const result = await useApiCall(apiUrl, 'get')
   if (result.success) {
-    emit('notify',`Node with ip ${ip} pinged successfully!`, 'success')
+    emit('notify',`Node ${name} pinged successfully!`, 'success')
   } else {
-    emit('notify', `Failed to ping node with ip ${ip}: ${result.error}`, 'error')
+    emit('notify', `Failed to ping node ${name}: ${result.error}`, 'error')
   }
 }
 </script>
