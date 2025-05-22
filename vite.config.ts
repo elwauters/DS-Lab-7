@@ -1,40 +1,50 @@
-import { defineConfig } from 'vite'
+// Plugins
 import vue from '@vitejs/plugin-vue'
+import vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
 
+// Utilities
+import { defineConfig } from 'vite'
+import { fileURLToPath, URL } from 'node:url'
+
+// https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [vue()],
+  plugins: [
+    vue({
+      template: { transformAssetUrls }
+    }),
+    // https://github.com/vuetifyjs/vuetify-loader/tree/next/packages/vite-plugin
+    vuetify({
+      autoImport: true,
+      styles: {
+        configFile: 'src/styles/settings.scss',
+      },
+    }),
+  ],
+  define: { 'process.env': {} },
+  resolve: {
+    alias: {
+      '@': fileURLToPath(new URL('./src', import.meta.url))
+    },
+    extensions: [
+      '.js',
+      '.json',
+      '.jsx',
+      '.mjs',
+      '.ts',
+      '.tsx',
+      '.vue',
+    ],
+  },
   server: {
-    port: 3000,
+    port: 3000, // Make sure your Vue dev server runs on this port inside the container
     proxy: {
       // Proxy for the Naming Server
+      // Requests to '/api-naming-server/...' will be forwarded to 'http://localhost:8083/...'
       '/api-naming-server': {
-        target: 'http://localhost:8083', // Spring Naming Server inside container
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api-naming-server/, ''),
+        target: 'http://localhost:8083', // This points to your Spring Naming Server inside the container
+        changeOrigin: true, // Necessary for proper host header rewriting
+        rewrite: (path) => path.replace(/^\/api-naming-server/, ''), // Removes the '/api-naming-server' prefix
       },
-      // For other nodes, we need a separate proxy that takes the full URL in the path.
-      // This is a bit of a hack, but works if the backend can't be changed for CORS.
-      '/proxy-node-direct': {
-        target: 'http://127.0.0.1', // Dummy target
-        changeOrigin: true,
-        rewrite: (path) => {
-          // Path will be like '/proxy-node-direct/http://172.19.0.1:8082/node/count'
-          const actualUrl = path.replace(/^\/proxy-node-direct\//, '');
-          console.log(`Proxying direct node call to: ${actualUrl}`);
-          return actualUrl; // This will become the new URL for the proxy
-        },
-        configure: (proxy, options) => {
-          proxy.on('proxyReq', (proxyReq, req, res) => {
-            const targetUrl = req.url; // This is the actual URL including host and port
-            const { protocol, hostname, port, pathname, search, hash } = new URL(targetUrl);
-
-            proxyReq.setHeader('Host', `<span class="math-inline">\{hostname\}\:</span>{port}`);
-            proxyReq.path = `<span class="math-inline">\{pathname\}</span>{search}${hash}`;
-            proxy.target = `<span class="math-inline">\{protocol\}//</span>{hostname}:${port}`; // Dynamically set target
-            console.log(`Final proxy target: <span class="math-inline">\{proxy\.target\}</span>{proxyReq.path}`);
-          });
-        }
-      }
     },
   },
-});
+})
