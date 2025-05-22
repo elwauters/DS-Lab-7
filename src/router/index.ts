@@ -1,6 +1,5 @@
 // Composables
 import { createRouter, createWebHistory } from 'vue-router'
-import {useAuthStore} from "@/stores/AuthStore";
 
 const routes = [
   {
@@ -16,55 +15,6 @@ const routes = [
         component: () => import(/* webpackChunkName: "home" */ '@/views/Home.vue'),
       },
     ],
-  },
-  {
-    path: '/users',
-    component: () => import('@/layouts/Default.vue'),
-    children: [
-      {
-        path: '',
-        name: 'Users',
-        component: () => import(/* webpackChunkName: "users" */ '@/views/users/Users.vue'),
-      }
-    ]
-  },
-  {
-    path: '/users/:id',
-    component: () => import('@/layouts/Default.vue'),
-    children: [
-      {
-        path: '',
-        name: 'User',
-        component: () => import(/* webpackChunkName: "user" */ '@/views/users/UserEdit.vue'),
-      }
-    ]
-  },
-  {
-    path: '/login',
-    name: 'Login',
-    component: () => import(/* webpackChunkName: "login" */ '@/views/auth/Login.vue'),
-  },
-  {
-    path: '/roles',
-    component: () => import('@/layouts/Default.vue'),
-    children: [
-      {
-        path: '',
-        name: 'Roles',
-        component: () => import(/* webpackChunkName: "roles" */ '@/views/roles/Roles.vue'),
-      }
-    ]
-  },
-  {
-    path: '/roles/:id',
-    component: () => import('@/layouts/Default.vue'),
-    children: [
-      {
-        path: '',
-        name: 'Role',
-        component: () => import(/* webpackChunkName: "role" */ '@/views/roles/RoleEdit.vue'),
-      }
-    ]
   }
 ]
 
@@ -74,16 +24,6 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  const publicPages = ['/login']
-  const authRequired = !publicPages.includes(to.path)
-  const authStore = useAuthStore()
-
-  // trying to access a restricted page + not logged in
-  // redirect to login page
-  if (authRequired && !authStore.isLoggedIn) {
-    return next('/login')
-  }
-
   next()
 })
 

@@ -5,20 +5,7 @@ const config = {
       name: 'Home',
       location: '/',
       icon: 'mdi-home',
-      allowedRoles: ['Administrator', 'Tester'],
     },
-    {
-      name: 'User management',
-      location: '/users',
-      icon: 'mdi-account-group',
-      allowedRoles: ['Administrator'],
-    },
-    {
-      name: 'Role managemment',
-      location: '/roles',
-      icon: 'mdi-folder-cog',
-      allowedRoles: ['Administrator']
-    }
   ]
 }
 
