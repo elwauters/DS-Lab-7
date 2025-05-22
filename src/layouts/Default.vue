@@ -26,10 +26,7 @@
             {{ link.name }}
           </v-btn>
         </span>
-
       </v-container>
-      <v-btn @click="themeStore.toggleTheme()" icon="mdi-theme-light-dark"></v-btn>
-      <v-btn @click="authStore.logout()" icon="mdi-logout"></v-btn>
     </v-app-bar>
 
     <v-navigation-drawer
