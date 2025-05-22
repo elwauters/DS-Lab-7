@@ -8,7 +8,9 @@
         md="6"
         lg="4"
       >
-        <NodeCard :node="node" />
+        <NodeCard :node="node"
+          @notify="$emit('notify', $event)"
+        />
       </v-col>
     </v-row>
   </v-container>

@@ -47,6 +47,9 @@
 
 
 <script lang="ts" setup>
+import {useApiCall} from "@/composables/useApi";
+import {ref} from "vue";
+
 defineProps<{
   server: {
     id: number;
@@ -56,4 +59,6 @@ defineProps<{
     numberOfNodes: number;
   };
 }>();
+
+
 </script>
