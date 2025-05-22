@@ -27,7 +27,7 @@ const emit = defineEmits<{
 }>()
 
 const servers = ref<NamingServer[]>([
-  new NamingServer(1, 'g2c1', false, 0, '172.19.0.1'),
+  new NamingServer(1, 'g2c1', false, 0, '172.19.0.6'),
 ])
 
 async function fetchNodeCounts() {
@@ -36,7 +36,7 @@ async function fetchNodeCounts() {
     if (result.success) {
       server.numberOfNodes = result.data
     } else {
-      emit('notify', `Failed to fetch number of nodes for ${server}: ${result.error}`, 'error')
+      emit('notify', `Failed to fetch number of nodes for ${server.name}: ${result.error}`, 'error')
     }
   }
 }
