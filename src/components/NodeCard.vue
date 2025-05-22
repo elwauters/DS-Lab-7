@@ -4,7 +4,7 @@
       <template v-slot:title>
         <v-card-title>
           {{ node.name }}
-          <span style="" class="font-weight-light text-subtitle-2 text-grey">({{ node.name}})</span>
+          <span style="" class="font-weight-light text-subtitle-2 text-grey">({{ node.ip}})</span>
         </v-card-title>
       </template>
 
@@ -26,7 +26,7 @@
     <v-divider></v-divider>
     <v-card-actions>
       <v-btn variant="tonal" :color="'grey'"
-        @click="pingNode(node.ip)"
+        @click="pingNode(node.name)"
       >
         <template v-slot:prepend>
           <v-icon icon="mdi-pulse" color="info"></v-icon>
