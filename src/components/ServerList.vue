@@ -32,7 +32,8 @@ const servers = ref<NamingServer[]>([
 
 async function fetchNodeCounts() {
   for (const server of servers.value) {
-    const result = await useApiCall(`http://${server.ip}:8083/namingserver/node/count`, 'get')
+    const apiUrl = `/api-naming-server/namingserver/node/count`;
+    const result = await useApiCall(apiUrl, 'get')
     if (result.success) {
       server.numberOfNodes = result.data
     } else {
