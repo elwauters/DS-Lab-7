@@ -25,6 +25,14 @@
     </v-card-text>
     <v-divider></v-divider>
     <v-card-actions>
+      <v-btn variant="tonal" :color="'grey'"
+        @click="pingNode(node.ip)"
+      >
+        <template v-slot:prepend>
+          <v-icon icon="mdi-pulse" color="info"></v-icon>
+        </template>
+        Ping
+      </v-btn>
       <v-btn variant="tonal" :color="'grey'">
         <template v-slot:prepend>
           <v-icon icon="mdi-power" color="success"></v-icon>
@@ -48,6 +56,8 @@
 </template>
 
 <script lang="ts" setup>
+import {useApiCall} from "@/composables/useApi";
+
 defineProps<{
   node: {
     id: number;
@@ -58,4 +68,17 @@ defineProps<{
     next: string;
   };
 }>();
+
+const emit = defineEmits<{
+  (e: 'notify', message: string, color: string): void
+}>()
+
+async function pingNode(ip: string) {
+  const result = await useApiCall(`http://${ip}:8082/node/ping`, 'get')
+  if (result.success) {
+    emit('notify',`Node with ip ${ip} pinged successfully!`, 'success')
+  } else {
+    emit('notify', `Failed to ping node with ip ${ip}: ${result.error}`, 'error')
+  }
+}
 </script>

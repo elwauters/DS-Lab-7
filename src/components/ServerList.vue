@@ -9,7 +9,7 @@
         lg="4"
       >
         <ServerCard :server="server"
-          @notify="$emit('notify', $event)"
+          @notify="(message:string, color:string) => $emit('notify', message, color)"
         />
       </v-col>
     </v-row>
@@ -27,16 +27,16 @@ const emit = defineEmits<{
 }>()
 
 const servers = ref<NamingServer[]>([
-  new NamingServer(1, 'g2c1', false, 0, 'http://172.19.0.1:8083'),
+  new NamingServer(1, 'g2c1', false, 0, '172.19.0.1'),
 ])
 
 async function fetchNodeCounts() {
   for (const server of servers.value) {
-    const result = await useApiCall(`${servers.value[0].ip}/namingserver/node/count`, 'get')
+    const result = await useApiCall(`http://${server.ip}:8083/namingserver/node/count`, 'get')
     if (result.success) {
       server.numberOfNodes = result.data
     } else {
-      emit('notify', `Failed to fetch number of nodes for ${servers.value[0].name}: ${result.error}`, 'error')
+      emit('notify', `Failed to fetch number of nodes for ${server}: ${result.error}`, 'error')
     }
   }
 }

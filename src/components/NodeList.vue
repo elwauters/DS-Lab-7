@@ -9,7 +9,7 @@
         lg="4"
       >
         <NodeCard :node="node"
-          @notify="$emit('notify', $event)"
+          @notify="(message:string, color:string) => $emit('notify', message, color)"
         />
       </v-col>
     </v-row>
