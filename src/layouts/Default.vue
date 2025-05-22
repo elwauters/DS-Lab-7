@@ -16,15 +16,6 @@
           v-for="link in navigation_links"
           :key="link.name"
         >
-          <v-btn
-            class="hidden-xs"
-            v-if="checkRoles(link.allowedRoles)"
-            :key="link.name"
-            :prepend-icon="link.icon"
-            :to="link.location"
-          >
-            {{ link.name }}
-          </v-btn>
         </span>
       </v-container>
     </v-app-bar>
@@ -43,15 +34,6 @@
           v-for="link in navigation_links"
           :key="link.name"
         >
-          <v-list-item
-            v-if="checkRoles(link.allowedRoles)"
-            :key="link.name"
-            :title="link.name"
-            :to="link.location"
-            :prepend-icon="link.icon"
-            active-color="primary"
-          >
-          </v-list-item>
         </span>
       </v-list>
     </v-navigation-drawer>
@@ -72,22 +54,10 @@
 <script lang="ts" setup>
 import {useTheme} from 'vuetify'
 import {ref} from "vue";
-import {useAuthStore} from "@/stores/AuthStore";
-import {useThemeStore} from "@/stores/ThemeStore";
 import config from "../../config";
 
 const theme = useTheme()
-const themeStore = useThemeStore()
-const authStore = useAuthStore()
 const drawer = ref(false)
 const navigation_links = config["NAVIGATION"]
-
-function checkRoles(roles: string[]): boolean {
-  const intersection = authStore.userInfo?.roles.filter(element => roles.includes(element));
-  if (!intersection) {
-    return false
-  }
-  return intersection.length > 0
-}
 
 </script>
