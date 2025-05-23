@@ -20,18 +20,19 @@
 <script lang="ts" setup>
 import NodeCard from './NodeCard.vue'
 import {Node} from "@/models/Node";
+import {ref} from "vue";
 
 
-const nodes = [
+const nodes = ref<Node[]>([
   new Node(1, 'g2c2', false, '172.19.0.4', "N/A", "N/A"),
   new Node(2, 'g2c3', false, '172.19.0.5', "N/A", "N/A"),
   new Node(3, 'g2c4', false, '172.19.0.2', "N/A", "N/A"),
   new Node(4, 'g2c5', false, '172.19.0.3', "N/A", "N/A"),
-];
+]);
 
 function updateNode({ id, online }: { id: number; online: boolean }) {
   console.log("updateNode in NodeList with: " + id + " and" + online)
-  const targetNode = nodes.find(n => n.id === id);
+  const targetNode = nodes.value.find(n => n.id === id);
   if (targetNode) {targetNode.online = online;}
 }
 
