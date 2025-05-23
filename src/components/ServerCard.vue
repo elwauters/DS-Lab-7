@@ -30,11 +30,18 @@
       </v-btn>
     </v-card-actions>
   </v-card>
+  <NodeMap v-model="showDetails" :nodeMap="nodeMap" />
 </template>
 
 
 
 <script lang="ts" setup>
+
+import {ref} from "vue";
+import {useApiCall} from "@/composables/useApi";
+
+const showDetails = ref(false);
+const nodeMap = ref<Record<string, string>>({})
 
 defineProps<{
   server: {
@@ -45,6 +52,24 @@ defineProps<{
     numberOfNodes: number;
   };
 }>();
+
+const emit = defineEmits<{
+  (e: 'notify', message: string, color: string): void;
+  (e: 'update-node', value: { id: number, online: boolean }): void;
+}>();
+
+async function getServerMap(name: string) {
+  const apiUrl = `/${name}/namingserver/node/map`;
+  const result = await useApiCall(apiUrl, 'get')
+  console.log(result)
+  if (result.success) {
+    emit('notify',`Node map successfully fetched from ${name}!`, 'success')
+    showDetails.value = true;
+    nodeMap.value = result.data as Record<string, string>
+  } else {
+    emit('notify', `Failed to fetch node map from ${name}: ${result.error}`, 'error')
+  }
+}
 
 
 </script>
