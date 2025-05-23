@@ -63,7 +63,6 @@ const emit = defineEmits<{
 async function getServerMap(name: string) {
   const apiUrl = `/${name}/namingserver/node/map`;
   const result = await useApiCall(apiUrl, 'get')
-  console.log(result)
   if (result.success) {
     emit('notify',`Node map successfully fetched from ${name}!`, 'success')
     showDetails.value = true;

@@ -48,13 +48,15 @@ function updateNode({ id, online }: { id: number; online: boolean }) {
 async function updateNextAndPrevious() {
   let error = false;
   for (const node of nodes.value) {
-    const apiUrl = `/${node.name}/node/nextAndPrevious`;
-    const result = await useApiCall(apiUrl, 'get')
+    if (node.online) {
+      const apiUrl = `/${node.name}/node/nextAndPrevious`;
+      const result = await useApiCall(apiUrl, 'get')
 
-    if (result.success) {
-      node.nextAndPrevious = result.data;
-    } else {
-      error = true;
+      if (result.success) {
+        node.nextAndPrevious = result.data;
+      } else {
+        error = true;
+      }
     }
   }
 
