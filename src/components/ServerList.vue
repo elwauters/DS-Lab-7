@@ -43,7 +43,7 @@ async function fetchNodeCounts() {
       server.numberOfNodes = result.data
       server.online = true;
     } else {
-      server.numberOfNodes = 0;g
+      server.numberOfNodes = 0;
       // Bad practice
       if (result.error.includes("empty")) {
         server.online = true;
