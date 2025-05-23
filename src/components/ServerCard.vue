@@ -22,7 +22,8 @@
     </v-card-text>
     <v-divider></v-divider>
     <v-card-actions>
-      <v-btn variant="tonal" :color="'grey'">
+      <v-btn variant="tonal" :color="'grey'"
+        @click="getServerMap">
         <template v-slot:prepend>
           <v-icon icon="mdi-information" color="info"></v-icon>
         </template>
