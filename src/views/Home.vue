@@ -27,16 +27,42 @@ import ServerList from "@/components/ServerList.vue";
 
 import { ref } from 'vue'
 
-const snackbarMessage = ref('')
-const showSnackbar = ref(false)
-const snackbarColor = ref('')
 const serverRefreshTrigger = ref(0);
 
+const snackbarQueue = ref<{ message: string; color: string }[]>([])
+const snackbarMessage = ref('')
+const snackbarColor = ref('')
+const showSnackbar = ref(false)
+let isShowing = false
+
 function handleNotify(message: string, color: string) {
-  snackbarMessage.value = message
-  showSnackbar.value = true
-  snackbarColor.value = color;
+  snackbarQueue.value.push({ message, color })
+  if (!isShowing) {
+    processSnackbarQueue()
+  }
 }
+
+function processSnackbarQueue() {
+  if (snackbarQueue.value.length === 0) {
+    isShowing = false
+    return
+  }
+
+  const next = snackbarQueue.value.shift()
+  if (next) {
+    snackbarMessage.value = next.message
+    snackbarColor.value = next.color
+    showSnackbar.value = true
+    isShowing = true
+
+    // Wait for the snackbar to close, then process next
+    setTimeout(() => {
+      showSnackbar.value = false
+      setTimeout(() => processSnackbarQueue(), 300) // short delay before next
+    }, 5000) // match your :timeout
+  }
+}
+
 
 function handleNodeUpdate() {
   console.log("Triggered handleNodeUpdate")
