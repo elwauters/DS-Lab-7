@@ -22,7 +22,6 @@
 import NodeCard from './NodeCard.vue'
 import {Node} from "@/models/Node";
 import {reactive, ref} from "vue";
-import {NextAndPrevious} from "@/models/NextAndPrevious";
 import {useApiCall} from "@/composables/useApi";
 
 const emit = defineEmits<{
@@ -32,10 +31,10 @@ const emit = defineEmits<{
 
 
 const nodes = ref<Node[]>([
-  new Node(1, 'g2c2', false, '172.19.0.4', reactive(new NextAndPrevious('N/A', 'N/A'))),
-  new Node(2, 'g2c3', false, '172.19.0.5', reactive(new NextAndPrevious('N/A', 'N/A'))),
-  new Node(3, 'g2c4', false, '172.19.0.2', reactive(new NextAndPrevious('N/A', 'N/A'))),
-  new Node(4, 'g2c5', false, '172.19.0.3', reactive(new NextAndPrevious('N/A', 'N/A'))),
+  new Node(1, 'g2c2', false, '172.19.0.4', 'N/A', 'N/A'),
+  new Node(2, 'g2c3', false, '172.19.0.5', 'N/A', 'N/A'),
+  new Node(3, 'g2c4', false, '172.19.0.2', 'N/A', 'N/A'),
+  new Node(4, 'g2c5', false, '172.19.0.3', 'N/A', 'N/A'),
 ]);
 
 function updateNode({ id, online }: { id: number; online: boolean }) {
@@ -58,11 +57,11 @@ async function updateNextAndPrevious() {
       console.log(result)
 
       if (result.success) {
-        node.nextAndPrevious.nextID = result.data.nextID;
-        node.nextAndPrevious.previousID = result.data.previousID;
+        node.nextId = result.data.nextID;
+        node.previousId = result.data.previousID;
       } else {
-        node.nextAndPrevious.nextID = 'N/A';
-        node.nextAndPrevious.previousID = 'N/A';
+        node.nextId = 'N/A';
+        node.previousId = 'N/A';
         error = true;
       }
     }
