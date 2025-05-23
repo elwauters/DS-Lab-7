@@ -24,18 +24,6 @@
     <v-card-actions>
       <v-btn variant="tonal" :color="'grey'">
         <template v-slot:prepend>
-          <v-icon icon="mdi-power" color="success"></v-icon>
-        </template>
-        Start
-      </v-btn>
-      <v-btn variant="tonal" :color="'grey'">
-        <template v-slot:prepend>
-          <v-icon icon="mdi-power" color="error"></v-icon>
-        </template>
-        Shutdown
-      </v-btn>
-      <v-btn variant="tonal" :color="'grey'">
-        <template v-slot:prepend>
           <v-icon icon="mdi-information" color="info"></v-icon>
         </template>
         Details
@@ -47,8 +35,6 @@
 
 
 <script lang="ts" setup>
-import {useApiCall} from "@/composables/useApi";
-import {ref} from "vue";
 
 defineProps<{
   server: {

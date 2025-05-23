@@ -27,7 +27,7 @@ const emit = defineEmits<{
 }>()
 
 const servers = ref<NamingServer[]>([
-  new NamingServer(1, 'g2c1', false, 0, 'localhost'),
+  new NamingServer(1, 'g2c1', false, 0, '172.19.0.6'),
 ])
 
 async function fetchNodeCounts() {

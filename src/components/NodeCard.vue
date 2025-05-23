@@ -33,7 +33,8 @@
         </template>
         Ping
       </v-btn>
-      <v-btn variant="tonal" :color="'grey'">
+      <v-btn variant="tonal" :color="'grey'"
+         @click="startNode(node.name)">
         <template v-slot:prepend>
           <v-icon icon="mdi-power" color="success"></v-icon>
         </template>
@@ -81,5 +82,16 @@ async function pingNode(name: string) {
   } else {
     emit('notify', `Failed to ping node ${name}: ${result.error}`, 'error')
   }
+}
+
+async function startNode(name: string) {
+  const apiUrl = `/${name}/node/start`;
+  const result = await useApiCall(apiUrl, 'post')
+  if (result.success) {
+    emit('notify',`Node ${name} started successfully!`, 'success')
+  } else {
+    emit('notify', `Failed to start node ${name}: ${result.error}`, 'error')
+  }
+
 }
 </script>
