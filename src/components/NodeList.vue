@@ -47,10 +47,15 @@ function updateNode({ id, online }: { id: number; online: boolean }) {
 
 async function updateNextAndPrevious() {
   let error = false;
+
+  // Small delay to give Node time to set its next and previous in the backend
+  new Promise(resolve => setTimeout(resolve, 1500));
   for (const node of nodes.value) {
     if (node.online) {
       const apiUrl = `/${node.name}/node/nextAndPrevious`;
       const result = await useApiCall(apiUrl, 'get')
+
+      console.log(result)
 
       if (result.success) {
         node.nextAndPrevious = result.data;
