@@ -10,7 +10,7 @@
       >
         <NodeCard :node="node"
           @notify="(message:string, color:string) => $emit('notify', message, color)"
-          @update:online="node.online = $event"
+          @update-node="updateNode"
         />
       </v-col>
     </v-row>
@@ -28,4 +28,10 @@ const nodes = [
   new Node(3, 'g2c4', false, '172.19.0.2', "N/A", "N/A"),
   new Node(4, 'g2c5', false, '172.19.0.3', "N/A", "N/A"),
 ];
+
+function updateNode({ id, online }: { id: number; online: boolean }) {
+  const targetNode = nodes.find(n => n.id === id);
+  if (targetNode) {targetNode.online = online;}
+}
+
 </script>
