@@ -34,14 +34,14 @@
         Ping
       </v-btn>
       <v-btn variant="tonal" :color="'grey'"
-        @click="startNode(node.name)">
+        @click="startNode(node.name, node.id)">
         <template v-slot:prepend>
           <v-icon icon="mdi-power" color="success"></v-icon>
         </template>
         Start
       </v-btn>
       <v-btn variant="tonal" :color="'grey'"
-         @click="stopNode(node.name)">
+        @click="stopNode(node.name, node.id)">
         <template v-slot:prepend>
           <v-icon icon="mdi-power" color="error"></v-icon>
         </template>
@@ -89,23 +89,23 @@ async function pingNode(name: string) {
   }
 }
 
-async function startNode(name: string) {
+async function startNode(name: string, id: number) {
   const apiUrl = `/${name}/node/start`;
   const result = await useApiCall(apiUrl, 'post')
   if (result.success) {
     emit('notify',`Node ${name} started successfully!`, 'success')
-    emit('update-node', { id: node.id, online: true });
+    emit('update-node', { id: id, online: true });
   } else {
     emit('notify', `Failed to start node ${name}: ${result.error}`, 'error')
   }
 }
 
-async function stopNode(name: string) {
+async function stopNode(name: string, id: number) {
   const apiUrl = `/${name}/node/shutdown`;
   const result = await useApiCall(apiUrl, 'delete')
   if (result.success) {
     emit('notify',`Node ${name} stopped successfully!`, 'success')
-    emit('update-node', { id: node.id, online: false });
+    emit('update-node', { id: id, online: false });
   } else {
     emit('notify', `Failed to stop node ${name}: ${result.error}`, 'error')
   }
