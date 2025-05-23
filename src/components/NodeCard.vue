@@ -59,6 +59,9 @@
 
 <script lang="ts" setup>
 import {useApiCall} from "@/composables/useApi";
+import {ref} from "vue";
+import {NextAndPrevious} from "@/models/NextAndPrevious";
+import {Node} from "@/models/Node";
 
 defineProps<{
   node: {
@@ -74,8 +77,8 @@ defineProps<{
 const emit = defineEmits<{
   (e: 'notify', message: string, color: string): void;
   (e: 'update-node', value: { id: number, online: boolean }): void;
+  (e: 'update-np'): void
 }>();
-
 
 
 async function pingNode(name: string) {
@@ -83,7 +86,6 @@ async function pingNode(name: string) {
   const result = await useApiCall(apiUrl, 'get')
   if (result.success) {
     emit('notify',`Node ${name} pinged successfully!`, 'success')
-
   } else {
     emit('notify', `Failed to ping node ${name}: ${result.error}`, 'error')
   }
@@ -95,6 +97,7 @@ async function startNode(name: string, id: number) {
   if (result.success) {
     emit('notify',`Node ${name} started successfully!`, 'success')
     emit('update-node', { id: id, online: true });
+    emit('update-np')
   } else {
     emit('notify', `Failed to start node ${name}: ${result.error}`, 'error')
   }
@@ -106,6 +109,7 @@ async function stopNode(name: string, id: number) {
   if (result.success) {
     emit('notify',`Node ${name} stopped successfully!`, 'success')
     emit('update-node', { id: id, online: false });
+    emit('update-np')
   } else {
     emit('notify', `Failed to stop node ${name}: ${result.error}`, 'error')
   }

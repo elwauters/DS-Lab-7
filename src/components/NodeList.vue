@@ -11,6 +11,7 @@
         <NodeCard :node="node"
           @notify="(message:string, color:string) => $emit('notify', message, color)"
           @update-node="updateNode"
+          @update-np="updateNextAndPrevious"
         />
       </v-col>
     </v-row>
@@ -21,6 +22,8 @@
 import NodeCard from './NodeCard.vue'
 import {Node} from "@/models/Node";
 import {ref} from "vue";
+import {NextAndPrevious} from "@/models/NextAndPrevious";
+import {useApiCall} from "@/composables/useApi";
 
 const emit = defineEmits<{
   (e: 'node-changed'): void;
@@ -29,10 +32,10 @@ const emit = defineEmits<{
 
 
 const nodes = ref<Node[]>([
-  new Node(1, 'g2c2', false, '172.19.0.4', "N/A", "N/A"),
-  new Node(2, 'g2c3', false, '172.19.0.5', "N/A", "N/A"),
-  new Node(3, 'g2c4', false, '172.19.0.2', "N/A", "N/A"),
-  new Node(4, 'g2c5', false, '172.19.0.3', "N/A", "N/A"),
+  new Node(1, 'g2c2', false, '172.19.0.4', new NextAndPrevious('', '')),
+  new Node(2, 'g2c3', false, '172.19.0.5', new NextAndPrevious('', '')),
+  new Node(3, 'g2c4', false, '172.19.0.2', new NextAndPrevious('', '')),
+  new Node(4, 'g2c5', false, '172.19.0.3', new NextAndPrevious('', '')),
 ]);
 
 function updateNode({ id, online }: { id: number; online: boolean }) {
@@ -40,6 +43,26 @@ function updateNode({ id, online }: { id: number; online: boolean }) {
   const targetNode = nodes.value.find(n => n.id === id);
   if (targetNode) {targetNode.online = online;}
   emit('node-changed');
+}
+
+async function updateNextAndPrevious() {
+  let error = false;
+  for (const node of nodes.value) {
+    const apiUrl = `/${node.name}/node/nextAndPrevious`;
+    const result = await useApiCall(apiUrl, 'get')
+
+    if (result.success) {
+      node.nextAndPrevious = result.data;
+    } else {
+      error = true;
+    }
+  }
+
+  if (!error) {
+    emit('notify', `Fetched next and previous of all nodes successfully`, 'success');
+  } else {
+    emit('notify', `Failed to fetch next and previous for one or more nodes`, 'error');
+  }
 }
 
 </script>
