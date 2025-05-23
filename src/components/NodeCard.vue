@@ -97,7 +97,7 @@ async function startNode(name: string) {
 
 async function stopNode(name: string) {
   const apiUrl = `/${name}/node/shutdown`;
-  const result = await useApiCall(apiUrl, 'post')
+  const result = await useApiCall(apiUrl, 'delete')
   if (result.success) {
     emit('notify',`Node ${name} stopped successfully!`, 'success')
   } else {
