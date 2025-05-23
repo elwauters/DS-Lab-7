@@ -72,14 +72,17 @@ defineProps<{
 }>();
 
 const emit = defineEmits<{
-  (e: 'notify', message: string, color: string): void
-}>()
+  (e: 'notify', message: string, color: string): void;
+  (e: 'update:online', value: boolean): void;
+}>();
+
 
 async function pingNode(name: string) {
   const apiUrl = `/${name}/node/ping`;
   const result = await useApiCall(apiUrl, 'get')
   if (result.success) {
     emit('notify',`Node ${name} pinged successfully!`, 'success')
+
   } else {
     emit('notify', `Failed to ping node ${name}: ${result.error}`, 'error')
   }
@@ -90,6 +93,7 @@ async function startNode(name: string) {
   const result = await useApiCall(apiUrl, 'post')
   if (result.success) {
     emit('notify',`Node ${name} started successfully!`, 'success')
+    emit('update:online', true) // <-- emit update
   } else {
     emit('notify', `Failed to start node ${name}: ${result.error}`, 'error')
   }
@@ -100,6 +104,7 @@ async function stopNode(name: string) {
   const result = await useApiCall(apiUrl, 'delete')
   if (result.success) {
     emit('notify',`Node ${name} stopped successfully!`, 'success')
+    emit('update:online', false) // <-- emit update
   } else {
     emit('notify', `Failed to stop node ${name}: ${result.error}`, 'error')
   }

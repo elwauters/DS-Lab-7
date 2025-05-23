@@ -10,6 +10,7 @@
       >
         <NodeCard :node="node"
           @notify="(message:string, color:string) => $emit('notify', message, color)"
+          @update:online="node.online = $event"
         />
       </v-col>
     </v-row>
