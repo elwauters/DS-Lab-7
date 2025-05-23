@@ -21,6 +21,11 @@ import ServerCard from './ServerCard.vue'
 import { NamingServer } from '@/models/NamingServer'
 import { useApiCall } from '@/composables/useApi'
 import { ref, onMounted } from 'vue'
+import { watch } from 'vue';
+
+const props = defineProps<{
+  refreshTrigger: number;
+}>();
 
 const emit = defineEmits<{
   (e: 'notify', message: string, color: string): void
@@ -42,6 +47,11 @@ async function fetchNodeCounts() {
     }
   }
 }
+
+watch(() => props.refreshTrigger, () => {
+  fetchNodeCounts();
+});
+
 
 onMounted(() => {
   fetchNodeCounts()

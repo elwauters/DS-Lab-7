@@ -22,6 +22,11 @@ import NodeCard from './NodeCard.vue'
 import {Node} from "@/models/Node";
 import {ref} from "vue";
 
+const emit = defineEmits<{
+  (e: 'node-changed'): void;
+  (e: 'notify', message: string, color: string): void;
+}>();
+
 
 const nodes = ref<Node[]>([
   new Node(1, 'g2c2', false, '172.19.0.4', "N/A", "N/A"),
@@ -34,6 +39,7 @@ function updateNode({ id, online }: { id: number; online: boolean }) {
   console.log("updateNode in NodeList with: " + id + " and" + online)
   const targetNode = nodes.value.find(n => n.id === id);
   if (targetNode) {targetNode.online = online;}
+  emit('node-changed');
 }
 
 </script>

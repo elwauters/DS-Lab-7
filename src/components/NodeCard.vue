@@ -95,7 +95,6 @@ async function startNode(name: string, id: number) {
   if (result.success) {
     emit('notify',`Node ${name} started successfully!`, 'success')
     emit('update-node', { id: id, online: true });
-    console.log("update-node emit with " + { id: id, online: true })
   } else {
     emit('notify', `Failed to start node ${name}: ${result.error}`, 'error')
   }
