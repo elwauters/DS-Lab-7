@@ -32,10 +32,11 @@ const servers = ref<NamingServer[]>([
 
 async function fetchNodeCounts() {
   for (const server of servers.value) {
-    const apiUrl = `/g2c1/namingserver/node/count`;
+    const apiUrl = `/${server.name}/namingserver/node/count`;
     const result = await useApiCall(apiUrl, 'get')
     if (result.success) {
       server.numberOfNodes = result.data
+      server.online = true;
     } else {
       emit('notify', `Failed to fetch number of nodes for ${server.name}: ${result.error}`, 'error')
     }
