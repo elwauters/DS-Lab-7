@@ -5,16 +5,18 @@
         <v-card-title class="text-h6 font-weight-bold">
           Node Map
         </v-card-title>
+        <v-divider/>
         <v-card-text>
           <v-list dense>
             <v-list-item
-              v-for="(name, id) in nodeMap"
+              v-for="(ip, id) in nodeMap"
               :key="id"
             >
-              <v-list-item-content>
-                <v-list-item-title>ID: {{ id }}</v-list-item-title>
-                <v-list-item-subtitle>Name: {{ name }}</v-list-item-subtitle>
-              </v-list-item-content>
+              <template v-slot:prepend>
+                <v-icon icon="mdi-circle-double"></v-icon>
+              </template>
+              <v-list-item-title>{{ id }}</v-list-item-title>
+              <v-list-item-subtitle>{{ ip }}</v-list-item-subtitle>
             </v-list-item>
           </v-list>
         </v-card-text>
