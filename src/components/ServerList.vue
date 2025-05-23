@@ -43,6 +43,7 @@ async function fetchNodeCounts() {
       server.numberOfNodes = result.data
       server.online = true;
     } else {
+      console.log(result)
       if (result.error?.status === 404) {
         server.online = true;
         emit('notify', `Number of nodes fetched, but server ${server.name} currently has no nodes in its map`, 'info');
