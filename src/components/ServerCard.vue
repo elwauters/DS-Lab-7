@@ -31,7 +31,7 @@
       </v-btn>
     </v-card-actions>
   </v-card>
-  <NodeMap v-model="showDetails" :nodeMap="nodeMap" />
+  <NodeMap v-model="showDetails" :nodeMap="nodes" />
 </template>
 
 
@@ -40,9 +40,10 @@
 
 import {ref} from "vue";
 import {useApiCall} from "@/composables/useApi";
+import NodeMap from "@/components/NodeMap.vue";
 
 const showDetails = ref(false);
-const nodeMap = ref<Record<string, string>>({})
+const nodes = ref<Record<string, string>>({})
 
 defineProps<{
   server: {
@@ -66,7 +67,7 @@ async function getServerMap(name: string) {
   if (result.success) {
     emit('notify',`Node map successfully fetched from ${name}!`, 'success')
     showDetails.value = true;
-    nodeMap.value = result.data as Record<string, string>
+    nodes.value = result.data as Record<string, string>
   } else {
     emit('notify', `Failed to fetch node map from ${name}: ${result.error}`, 'error')
   }
