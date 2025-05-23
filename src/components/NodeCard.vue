@@ -34,13 +34,14 @@
         Ping
       </v-btn>
       <v-btn variant="tonal" :color="'grey'"
-         @click="startNode(node.name)">
+        @click="startNode(node.name)">
         <template v-slot:prepend>
           <v-icon icon="mdi-power" color="success"></v-icon>
         </template>
         Start
       </v-btn>
-      <v-btn variant="tonal" :color="'grey'">
+      <v-btn variant="tonal" :color="'grey'"
+         @click="stopNode(node.name)">
         <template v-slot:prepend>
           <v-icon icon="mdi-power" color="error"></v-icon>
         </template>
@@ -92,6 +93,15 @@ async function startNode(name: string) {
   } else {
     emit('notify', `Failed to start node ${name}: ${result.error}`, 'error')
   }
+}
 
+async function stopNode(name: string) {
+  const apiUrl = `/${name}/node/shutdown`;
+  const result = await useApiCall(apiUrl, 'post')
+  if (result.success) {
+    emit('notify',`Node ${name} stopped successfully!`, 'success')
+  } else {
+    emit('notify', `Failed to stop node ${name}: ${result.error}`, 'error')
+  }
 }
 </script>
