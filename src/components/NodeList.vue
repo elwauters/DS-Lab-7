@@ -32,10 +32,10 @@ const emit = defineEmits<{
 
 
 const nodes = ref<Node[]>([
-  new Node(1, 'g2c2', false, '172.19.0.4', new NextAndPrevious('', '')),
-  new Node(2, 'g2c3', false, '172.19.0.5', new NextAndPrevious('', '')),
-  new Node(3, 'g2c4', false, '172.19.0.2', new NextAndPrevious('', '')),
-  new Node(4, 'g2c5', false, '172.19.0.3', new NextAndPrevious('', '')),
+  new Node(1, 'g2c2', false, '172.19.0.4', new NextAndPrevious('N/A', 'N/A')),
+  new Node(2, 'g2c3', false, '172.19.0.5', new NextAndPrevious('N/A', 'N/A')),
+  new Node(3, 'g2c4', false, '172.19.0.2', new NextAndPrevious('N/A', 'N/A')),
+  new Node(4, 'g2c5', false, '172.19.0.3', new NextAndPrevious('N/A', 'N/A')),
 ]);
 
 function updateNode({ id, online }: { id: number; online: boolean }) {
