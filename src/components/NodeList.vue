@@ -30,6 +30,7 @@ const nodes = [
 ];
 
 function updateNode({ id, online }: { id: number; online: boolean }) {
+  console.log("updateNode in NodeList with: " + id + " and" + online)
   const targetNode = nodes.find(n => n.id === id);
   if (targetNode) {targetNode.online = online;}
 }
