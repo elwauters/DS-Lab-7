@@ -17,10 +17,10 @@
     <v-divider></v-divider>
     <v-card-text>
       <div>
-        Previous node <strong>{{ node.previous }}</strong>
+        Previous node <strong>{{ node.nextAndPrevious.previousID }}</strong>
       </div>
       <div>
-        Next node <strong>{{ node.next }}</strong>
+        Next node <strong>{{ node.nextAndPrevious.nextID }}</strong>
       </div>
     </v-card-text>
     <v-divider></v-divider>
@@ -59,9 +59,7 @@
 
 <script lang="ts" setup>
 import {useApiCall} from "@/composables/useApi";
-import {ref} from "vue";
 import {NextAndPrevious} from "@/models/NextAndPrevious";
-import {Node} from "@/models/Node";
 
 defineProps<{
   node: {
@@ -69,8 +67,7 @@ defineProps<{
     name: string;
     online: boolean;
     ip: string;
-    previous: string;
-    next: string;
+    nextAndPrevious: NextAndPrevious
   };
 }>();
 

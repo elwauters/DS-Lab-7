@@ -21,7 +21,7 @@
 <script lang="ts" setup>
 import NodeCard from './NodeCard.vue'
 import {Node} from "@/models/Node";
-import {ref} from "vue";
+import {reactive, ref} from "vue";
 import {NextAndPrevious} from "@/models/NextAndPrevious";
 import {useApiCall} from "@/composables/useApi";
 
@@ -32,10 +32,10 @@ const emit = defineEmits<{
 
 
 const nodes = ref<Node[]>([
-  new Node(1, 'g2c2', false, '172.19.0.4', new NextAndPrevious('N/A', 'N/A')),
-  new Node(2, 'g2c3', false, '172.19.0.5', new NextAndPrevious('N/A', 'N/A')),
-  new Node(3, 'g2c4', false, '172.19.0.2', new NextAndPrevious('N/A', 'N/A')),
-  new Node(4, 'g2c5', false, '172.19.0.3', new NextAndPrevious('N/A', 'N/A')),
+  new Node(1, 'g2c2', false, '172.19.0.4', reactive(new NextAndPrevious('N/A', 'N/A'))),
+  new Node(2, 'g2c3', false, '172.19.0.5', reactive(new NextAndPrevious('N/A', 'N/A'))),
+  new Node(3, 'g2c4', false, '172.19.0.2', reactive(new NextAndPrevious('N/A', 'N/A'))),
+  new Node(4, 'g2c5', false, '172.19.0.3', reactive(new NextAndPrevious('N/A', 'N/A'))),
 ]);
 
 function updateNode({ id, online }: { id: number; online: boolean }) {
@@ -49,7 +49,7 @@ async function updateNextAndPrevious() {
   let error = false;
 
   // Small delay to give Node time to set its next and previous in the backend
-  new Promise(resolve => setTimeout(resolve, 1500));
+  await new Promise(resolve => setTimeout(resolve, 2500));
   for (const node of nodes.value) {
     if (node.online) {
       const apiUrl = `/${node.name}/node/nextAndPrevious`;
@@ -58,8 +58,11 @@ async function updateNextAndPrevious() {
       console.log(result)
 
       if (result.success) {
-        node.nextAndPrevious = result.data;
+        node.nextAndPrevious.nextID = result.data.nextID;
+        node.nextAndPrevious.previousID = result.data.previousID;
       } else {
+        node.nextAndPrevious.nextID = 'N/A';
+        node.nextAndPrevious.previousID = 'N/A';
         error = true;
       }
     }
