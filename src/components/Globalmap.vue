@@ -53,20 +53,8 @@
               <v-list-item-subtitle>Version: {{ file.version }}</v-list-item-subtitle>
             </v-list-item>
             <template v-slot:append>
-              <v-btn
-                v-if="!file.locked"
-                color="grey-lighten-1"
-                icon="mdi-lock-open-variant"
-                variant="text"
-                disabled
-              ></v-btn>
-              <v-btn
-                v-if="file.locked"
-                color="grey-lighten-1"
-                icon="mdi-lock"
-                variant="text"
-                disabled
-              ></v-btn>
+              <v-icon color="grey-lighten-1" v-if="!file.locked" icon="mdi-lock-open-variant"></v-icon>
+              <v-icon color="grey-lighten-1" v-if="file.locked" icon="mdi-lock"></v-icon>
             </template>
           </v-list>
         </div>
