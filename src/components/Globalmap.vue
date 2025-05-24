@@ -81,7 +81,7 @@ console.log(props.fileMap);
 const emit = defineEmits<{
   (e: 'update:modelValue', value: boolean): void;
   (e: 'notify', message: string, color: string): void;
-  (e: 'reload-map', filename: string): void;
+  (e: 'reload-map', nodeName: string): void;
 }>();
 
 const show = ref(props.modelValue)
@@ -125,7 +125,7 @@ async function releaseLock(filename: string) {
   const result = await useApiCall(apiUrl, 'post')
   if (result.success) {
     emit('notify',`Lock for ${filename} successfully released!`, 'success')
-    emit('reload-map', filename)
+    emit('reload-map', props.nodeName)
   } else {
     emit('notify', `Failed to release lock for ${filename}: ${result.error}`, 'error')
   }
