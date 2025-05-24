@@ -19,7 +19,7 @@
               <template v-slot:prepend>
                 <v-icon icon="mdi-file"></v-icon>
               </template>
-              <v-list-item-title>{{ file.filename }}</v-list-item-title>
+              <v-list-item-title>{{ file.filename }} ({{file.fileHash}})</v-list-item-title>
               <v-list-item-subtitle>Version: {{ file.version }}</v-list-item-subtitle>
             </v-list-item>
           </v-list>
@@ -34,7 +34,7 @@
               <template v-slot:prepend>
                 <v-icon icon="mdi-file-multiple"></v-icon>
               </template>
-              <v-list-item-title>{{ file.filename }}</v-list-item-title>
+              <v-list-item-title>{{ file.filename }} ({{file.fileHash}})</v-list-item-title>
               <v-list-item-subtitle>Version: {{ file.version }}</v-list-item-subtitle>
             </v-list-item>
           </v-list>
@@ -51,15 +51,7 @@
 
 <script lang="ts" setup>
 import { computed, ref, watch } from 'vue'
-
-export interface FileInfo {
-  filename: string
-  owner: string | null
-  replicationLocations: string[] | null
-  locked: boolean
-  lockedByNodeIp: string | null
-  version: number
-}
+import { FileInfo } from "@/models/FileInfo";
 
 const props = defineProps<{
   modelValue: boolean
