@@ -124,6 +124,7 @@ async function stopNode(name: string, id: number) {
 async function getGlobalMap(name: string) {
   const apiUrl = `/${name}/agent/sync/filelist`;
   const result = await useApiCall(apiUrl, 'get')
+  console.log(result)
   if (result.success) {
     globalMap.value = result.data;
     showDetails.value = true;
