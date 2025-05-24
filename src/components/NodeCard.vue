@@ -48,7 +48,7 @@
         Shutdown
       </v-btn>
       <v-btn variant="tonal" :color="'grey'"
-        @click="getGlobalMap(node.name, node.id)">
+        @click="getGlobalMap(node.name)">
         <template v-slot:prepend>
           <v-icon icon="mdi-information" color="info"></v-icon>
         </template>
@@ -56,14 +56,17 @@
       </v-btn>
     </v-card-actions>
   </v-card>
+  <Globalmap :model-value="showDetails" :file-map="globalMap" :node-ip="node.ip"/>
 </template>
 
 <script lang="ts" setup>
 import {useApiCall} from "@/composables/useApi";
 import {ref} from "vue";
 import {FileInfo} from "@/models/FileInfo";
+import Globalmap from "@/components/Globalmap.vue";
 
-const globalMap = ref<Record<string, FileInfo>>({})
+const globalMap = ref<Record<string, FileInfo>>({});
+const showDetails = ref(false);
 
 defineProps<{
   node: {
@@ -118,11 +121,12 @@ async function stopNode(name: string, id: number) {
   }
 }
 
-async function getGlobalMap(name: string, id: number) {
+async function getGlobalMap(name: string) {
   const apiUrl = `/${name}/agent/sync/filelist`;
   const result = await useApiCall(apiUrl, 'get')
-  console.log(result);
   if (result.success) {
+    globalMap.value = result.data;
+    showDetails.value = true;
     emit('notify',`Fetched global map of ${name} successfully!`, 'success')
   } else {
     emit('notify', `Failed to fetch global map for node ${name}: ${result.error}`, 'error')
