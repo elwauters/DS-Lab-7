@@ -15,11 +15,11 @@
         <div v-if="ownedFiles.length > 0">
           <h3 class="text-subtitle-1 font-weight-bold mb-2">Files Owned by This Node</h3>
           <v-list dense>
-            <v-list-item v-for="file in ownedFiles" :key="file.filename">
+            <v-list-item v-for="file in ownedFiles" :key="file.fileName">
               <template v-slot:prepend>
                 <v-icon icon="mdi-file"></v-icon>
               </template>
-              <v-list-item-title>{{ file.filename }} ({{file.fileHash}})</v-list-item-title>
+              <v-list-item-title>{{ file.fileName }} ({{file.fileHash}})</v-list-item-title>
               <v-list-item-subtitle>Version: {{ file.version }}</v-list-item-subtitle>
               <template v-slot:append>
                 <v-btn
@@ -45,11 +45,11 @@
         <div v-if="replicatedFiles.length > 0">
           <h3 class="text-subtitle-1 font-weight-bold mb-2">Replicated Files</h3>
           <v-list dense>
-            <v-list-item v-for="file in replicatedFiles" :key="file.filename">
+            <v-list-item v-for="file in replicatedFiles" :key="file.fileName">
               <template v-slot:prepend>
                 <v-icon icon="mdi-file-multiple"></v-icon>
               </template>
-              <v-list-item-title>{{ file.filename }} ({{file.fileHash}})</v-list-item-title>
+              <v-list-item-title>{{ file.fileName }} ({{file.fileHash}})</v-list-item-title>
               <v-list-item-subtitle>Version: {{ file.version }}</v-list-item-subtitle>
             </v-list-item>
           </v-list>
@@ -80,7 +80,7 @@ const props = defineProps<{
 const emit = defineEmits<{
   (e: 'update:modelValue', value: boolean): void;
   (e: 'notify', message: string, color: string): void;
-  (e: 'reload-map'):void;
+  (e: 'reload-map', fileName: string): void;
 }>();
 
 const show = ref(props.modelValue)
@@ -113,7 +113,7 @@ async function requestLock(fileName: string) {
   const result = await useApiCall(apiUrl, 'post')
   if (result.success) {
     emit('notify',`Lock for ${fileName} requested successfully!`, 'success')
-    emit('reload-map')
+    emit('reload-map', fileName)
   } else {
     emit('notify', `Failed to requests lock for ${fileName}: ${result.error}`, 'error')
   }
@@ -124,7 +124,7 @@ async function releaseLock(fileName: string) {
   const result = await useApiCall(apiUrl, 'post')
   if (result.success) {
     emit('notify',`Lock for ${fileName} successfully released!`, 'success')
-    emit('reload-map')
+    emit('reload-map', fileName)
   } else {
     emit('notify', `Failed to release lock for ${fileName}: ${result.error}`, 'error')
   }
