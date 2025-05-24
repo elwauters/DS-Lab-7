@@ -15,11 +15,11 @@
         <div v-if="ownedFiles.length > 0">
           <h3 class="text-subtitle-1 font-weight-bold mb-2">Files Owned by This Node</h3>
           <v-list dense>
-            <v-list-item v-for="file in ownedFiles" :key="file.fileName">
+            <v-list-item v-for="file in ownedFiles" :key="file.filename">
               <template v-slot:prepend>
                 <v-icon icon="mdi-file"></v-icon>
               </template>
-              <v-list-item-title>{{ file.fileName }} ({{file.fileHash}})</v-list-item-title>
+              <v-list-item-title>{{ file.filename }} ({{file.fileHash}})</v-list-item-title>
               <v-list-item-subtitle>Version: {{ file.version }}</v-list-item-subtitle>
               <template v-slot:append>
                 <v-btn
@@ -27,13 +27,13 @@
                   color="grey-lighten-1"
                   icon="mdi-lock-open-variant"
                   variant="text"
-                  @click="requestLock(file.fileName)"
+                  @click="requestLock(file.filename)"
                 ></v-btn>
                 <v-btn
                   v-if="file.locked"
                   icon="mdi-lock"
                   variant="text"
-                  @click="releaseLock(file.fileName)"
+                  @click="releaseLock(file.filename)"
                 ></v-btn>
               </template>
             </v-list-item>
@@ -45,11 +45,11 @@
         <div v-if="replicatedFiles.length > 0">
           <h3 class="text-subtitle-1 font-weight-bold mb-2">Replicated Files</h3>
           <v-list dense>
-            <v-list-item v-for="file in replicatedFiles" :key="file.fileName">
+            <v-list-item v-for="file in replicatedFiles" :key="file.filename">
               <template v-slot:prepend>
                 <v-icon icon="mdi-file-multiple"></v-icon>
               </template>
-              <v-list-item-title>{{ file.fileName }} ({{file.fileHash}})</v-list-item-title>
+              <v-list-item-title>{{ file.filename }} ({{file.fileHash}})</v-list-item-title>
               <v-list-item-subtitle>Version: {{ file.version }}</v-list-item-subtitle>
             </v-list-item>
           </v-list>
@@ -81,7 +81,7 @@ console.log(props.fileMap);
 const emit = defineEmits<{
   (e: 'update:modelValue', value: boolean): void;
   (e: 'notify', message: string, color: string): void;
-  (e: 'reload-map', fileName: string): void;
+  (e: 'reload-map', filename: string): void;
 }>();
 
 const show = ref(props.modelValue)
@@ -109,25 +109,25 @@ const replicatedFiles = computed(() =>
   )
 )
 
-async function requestLock(fileName: string) {
-  const apiUrl = `/${props.nodeName}/agent/sync/lock/${fileName}?requesterNodeIp=${encodeURIComponent(props.nodeIp)}`;
+async function requestLock(filename: string) {
+  const apiUrl = `/${props.nodeName}/agent/sync/lock/${filename}?requesterNodeIp=${encodeURIComponent(props.nodeIp)}`;
   const result = await useApiCall(apiUrl, 'post')
   if (result.success) {
-    emit('notify',`Lock for ${fileName} requested successfully!`, 'success')
-    emit('reload-map', fileName)
+    emit('notify',`Lock for ${filename} requested successfully!`, 'success')
+    emit('reload-map', filename)
   } else {
-    emit('notify', `Failed to requests lock for ${fileName}: ${result.error}`, 'error')
+    emit('notify', `Failed to requests lock for ${filename}: ${result.error}`, 'error')
   }
 }
 
-async function releaseLock(fileName: string) {
-  const apiUrl = `/${props.nodeName}/agent/sync/unlock/${fileName}?requesterNodeIp=${encodeURIComponent(props.nodeIp)}`;
+async function releaseLock(filename: string) {
+  const apiUrl = `/${props.nodeName}/agent/sync/unlock/${filename}?requesterNodeIp=${encodeURIComponent(props.nodeIp)}`;
   const result = await useApiCall(apiUrl, 'post')
   if (result.success) {
-    emit('notify',`Lock for ${fileName} successfully released!`, 'success')
-    emit('reload-map', fileName)
+    emit('notify',`Lock for ${filename} successfully released!`, 'success')
+    emit('reload-map', filename)
   } else {
-    emit('notify', `Failed to release lock for ${fileName}: ${result.error}`, 'error')
+    emit('notify', `Failed to release lock for ${filename}: ${result.error}`, 'error')
   }
 }
 </script>

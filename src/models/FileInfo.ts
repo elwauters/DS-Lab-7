@@ -1,5 +1,5 @@
 export class FileInfo {
-  fileName: string;
+  filename: string;
   owner: string | null;
   replicationLocations: string[];
   locked: boolean;
@@ -8,8 +8,8 @@ export class FileInfo {
   fileHash: number;
 
 
-  constructor(fileName: string, owner: string | null, replicationLocations: string[], locked: boolean, lockedByNodeIp: string | null, version: number, fileHash: number) {
-    this.fileName = fileName;
+  constructor(filename: string, owner: string | null, replicationLocations: string[], locked: boolean, lockedByNodeIp: string | null, version: number, fileHash: number) {
+    this.filename = filename;
     this.owner = owner;
     this.replicationLocations = replicationLocations;
     this.locked = locked;
