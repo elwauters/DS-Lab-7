@@ -56,7 +56,14 @@
       </v-btn>
     </v-card-actions>
   </v-card>
-  <Globalmap v-model="showDetails" :file-map="globalMap" :node-ip="node.ip"/>
+  <Globalmap
+    v-model="showDetails"
+    :file-map="globalMap"
+    :node-ip="node.ip"
+    :node-name="node.name"
+    @notify="(message:string, color:string) => $emit('notify', message, color)"
+    @reload-map="getGlobalMap"
+  />
 </template>
 
 <script lang="ts" setup>

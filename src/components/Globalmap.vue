@@ -21,6 +21,21 @@
               </template>
               <v-list-item-title>{{ file.filename }} ({{file.fileHash}})</v-list-item-title>
               <v-list-item-subtitle>Version: {{ file.version }}</v-list-item-subtitle>
+              <template v-slot:append>
+                <v-btn
+                  v-if="!file.locked"
+                  color="grey-lighten-1"
+                  icon="mdi-lock-open-variant"
+                  variant="text"
+                  @click="requestLock(file.fileName)"
+                ></v-btn>
+                <v-btn
+                  v-if="file.locked"
+                  icon="mdi-lock"
+                  variant="text"
+                  @click="releaseLock(file.fileName)"
+                ></v-btn>
+              </template>
             </v-list-item>
           </v-list>
         </div>
@@ -52,14 +67,21 @@
 <script lang="ts" setup>
 import { computed, ref, watch } from 'vue'
 import { FileInfo } from "@/models/FileInfo";
+import {useApiCall} from "@/composables/useApi";
+import {fi} from "vuetify/locale";
 
 const props = defineProps<{
   modelValue: boolean
   fileMap: Record<string, FileInfo>
   nodeIp: string
+  nodeName: string
 }>()
 
-const emit = defineEmits(['update:modelValue'])
+const emit = defineEmits<{
+  (e: 'update:modelValue', value: boolean): void;
+  (e: 'notify', message: string, color: string): void;
+  (e: 'reload-map'):void;
+}>();
 
 const show = ref(props.modelValue)
 
@@ -85,6 +107,28 @@ const replicatedFiles = computed(() =>
       file.replicationLocations?.includes(props.nodeIp)
   )
 )
+
+async function requestLock(fileName: string) {
+  const apiUrl = `/${props.nodeName}/agent/sync/lock/${fileName}`;
+  const result = await useApiCall(apiUrl, 'post')
+  if (result.success) {
+    emit('notify',`Lock for ${fileName} requested successfully!`, 'success')
+    emit('reload-map')
+  } else {
+    emit('notify', `Failed to requests lock for ${fileName}: ${result.error}`, 'error')
+  }
+}
+
+async function releaseLock(fileName: string) {
+  const apiUrl = `/${props.nodeName}/agent/sync/unlock/${fileName}`;
+  const result = await useApiCall(apiUrl, 'post')
+  if (result.success) {
+    emit('notify',`Lock for ${fileName} successfully released!`, 'success')
+    emit('reload-map')
+  } else {
+    emit('notify', `Failed to release lock for ${fileName}: ${result.error}`, 'error')
+  }
+}
 </script>
 
 <style scoped>
