@@ -56,7 +56,7 @@
       </v-btn>
     </v-card-actions>
   </v-card>
-  <Globalmap :model-value="showDetails" :file-map="globalMap" :node-ip="node.ip"/>
+  <Globalmap v-model="showDetails" :file-map="globalMap" :node-ip="node.ip"/>
 </template>
 
 <script lang="ts" setup>
