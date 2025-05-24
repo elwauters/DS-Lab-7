@@ -109,7 +109,7 @@ const replicatedFiles = computed(() =>
 )
 
 async function requestLock(fileName: string) {
-  const apiUrl = `/${props.nodeName}/agent/sync/lock/${fileName}`;
+  const apiUrl = `/${props.nodeName}/agent/sync/lock/${fileName}?requesterNodeIp=${encodeURIComponent(props.nodeIp)}`;
   const result = await useApiCall(apiUrl, 'post')
   if (result.success) {
     emit('notify',`Lock for ${fileName} requested successfully!`, 'success')
@@ -120,7 +120,7 @@ async function requestLock(fileName: string) {
 }
 
 async function releaseLock(fileName: string) {
-  const apiUrl = `/${props.nodeName}/agent/sync/unlock/${fileName}`;
+  const apiUrl = `/${props.nodeName}/agent/sync/unlock/${fileName}?requesterNodeIp=${encodeURIComponent(props.nodeIp)}`;
   const result = await useApiCall(apiUrl, 'post')
   if (result.success) {
     emit('notify',`Lock for ${fileName} successfully released!`, 'success')
