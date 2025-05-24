@@ -47,7 +47,8 @@
         </template>
         Shutdown
       </v-btn>
-      <v-btn variant="tonal" :color="'grey'">
+      <v-btn variant="tonal" :color="'grey'"
+        @click="getGlobalMap(node.name, node.id)">
         <template v-slot:prepend>
           <v-icon icon="mdi-information" color="info"></v-icon>
         </template>
@@ -59,6 +60,10 @@
 
 <script lang="ts" setup>
 import {useApiCall} from "@/composables/useApi";
+import {ref} from "vue";
+import {FileInfo} from "@/models/FileInfo";
+
+const globalMap = ref<Record<string, FileInfo>>({})
 
 defineProps<{
   node: {
@@ -76,6 +81,7 @@ const emit = defineEmits<{
   (e: 'update-node', value: { id: number, online: boolean }): void;
   (e: 'update-np'): void
 }>();
+
 
 
 async function pingNode(name: string) {
@@ -109,6 +115,17 @@ async function stopNode(name: string, id: number) {
     emit('update-np')
   } else {
     emit('notify', `Failed to stop node ${name}: ${result.error}`, 'error')
+  }
+}
+
+async function getGlobalMap(name: string, id: number) {
+  const apiUrl = `/${name}/sync/filelist`;
+  const result = await useApiCall(apiUrl, 'get')
+  console.log(result);
+  if (result.success) {
+    emit('notify',`Fetched global map of ${name} successfully!`, 'success')
+  } else {
+    emit('notify', `Failed to fetch global map for node ${name}: ${result.error}`, 'error')
   }
 }
 </script>

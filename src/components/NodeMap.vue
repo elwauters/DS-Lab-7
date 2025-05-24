@@ -6,10 +6,10 @@
           Node Map
         </v-card-title>
         <v-divider/>
-        <v-card-text v-if="!nodeMap">
+        <v-card-text v-if="Object.keys(nodeMap).length === 0">
           All nodes are currently offline.
         </v-card-text>
-        <v-card-text v-if="nodeMap">
+        <v-card-text v-if="Object.keys(nodeMap).length > 0">
           <v-list dense>
             <v-list-item
               v-for="(ip, id) in nodeMap"
