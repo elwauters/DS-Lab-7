@@ -52,6 +52,22 @@
               <v-list-item-title>{{ file.filename }} ({{file.fileHash}})</v-list-item-title>
               <v-list-item-subtitle>Version: {{ file.version }}</v-list-item-subtitle>
             </v-list-item>
+            <template v-slot:append>
+              <v-btn
+                v-if="!file.locked"
+                color="grey-lighten-1"
+                icon="mdi-lock-open-variant"
+                variant="text"
+                disabled
+              ></v-btn>
+              <v-btn
+                v-if="file.locked"
+                color="grey-lighten-1"
+                icon="mdi-lock"
+                variant="text"
+                disabled
+              ></v-btn>
+            </template>
           </v-list>
         </div>
       </v-card-text>
