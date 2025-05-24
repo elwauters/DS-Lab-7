@@ -40,6 +40,13 @@ const nodes = ref<Node[]>([
 function updateNode({ id, online }: { id: number; online: boolean }) {
   console.log("updateNode in NodeList with: " + id + " and" + online)
   const targetNode = nodes.value.find(n => n.id === id);
+
+  // If node that was online is being turned off
+  if (targetNode?.online && !online) {
+    targetNode.nextId = 'N/A';
+    targetNode.previousId = 'N/A';
+  }
+
   if (targetNode) {targetNode.online = online;}
   emit('node-changed');
 }
