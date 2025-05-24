@@ -68,7 +68,6 @@
 import { computed, ref, watch } from 'vue'
 import { FileInfo } from "@/models/FileInfo";
 import {useApiCall} from "@/composables/useApi";
-import {fi} from "vuetify/locale";
 
 const props = defineProps<{
   modelValue: boolean
@@ -76,6 +75,8 @@ const props = defineProps<{
   nodeIp: string
   nodeName: string
 }>()
+
+console.log(props.fileMap);
 
 const emit = defineEmits<{
   (e: 'update:modelValue', value: boolean): void;
