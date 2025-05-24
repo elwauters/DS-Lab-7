@@ -51,11 +51,11 @@
               </template>
               <v-list-item-title>{{ file.filename }} ({{file.fileHash}})</v-list-item-title>
               <v-list-item-subtitle>Version: {{ file.version }}</v-list-item-subtitle>
+              <template v-slot:append>
+                <v-icon color="grey-lighten-1" v-if="!file.locked" icon="mdi-lock-open-variant"></v-icon>
+                <v-icon color="grey-lighten-1" v-if="file.locked" icon="mdi-lock"></v-icon>
+              </template>
             </v-list-item>
-            <template v-slot:append>
-              <v-icon color="grey-lighten-1" v-if="!file.locked" icon="mdi-lock-open-variant"></v-icon>
-              <v-icon color="grey-lighten-1" v-if="file.locked" icon="mdi-lock"></v-icon>
-            </template>
           </v-list>
         </div>
       </v-card-text>
