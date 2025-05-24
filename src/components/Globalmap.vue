@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="show" max-width="700">
+  <v-dialog v-model="props.modelValue" max-width="700">
     <v-card>
       <v-card-title class="text-h6 font-weight-bold">
         File Details
@@ -43,7 +43,7 @@
 
       <v-card-actions>
         <v-spacer />
-        <v-btn text @click="show = false">Close</v-btn>
+        <v-btn text @click="emit('update:modelValue', false)">Close</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -68,10 +68,6 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits(['update:modelValue'])
-
-const show = ref(props.modelValue)
-watch(() => props.modelValue, (val) => (show.value = val))
-watch(show, (val) => emit('update:modelValue', val))
 
 // Computed categorized lists
 const ownedFiles = computed(() =>
