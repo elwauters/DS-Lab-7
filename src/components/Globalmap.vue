@@ -114,7 +114,7 @@ async function requestLock(filename: string) {
   const result = await useApiCall(apiUrl, 'post')
   if (result.success) {
     emit('notify',`Lock for ${filename} requested successfully!`, 'success')
-    emit('reload-map', filename)
+    emit('reload-map', props.nodeName)
   } else {
     emit('notify', `Failed to requests lock for ${filename}: ${result.error}`, 'error')
   }
