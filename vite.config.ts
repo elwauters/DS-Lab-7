@@ -36,7 +36,7 @@ export default defineConfig({
     ],
   },
   server: {
-    port: 3000, // Make sure your Vue dev server runs on this port inside the container
+    port: 3000,
     proxy: {
       // Proxy for the Naming Server
       // Requests to '/g2c1/...' will be forwarded to 'http://localhost:8083/...'
