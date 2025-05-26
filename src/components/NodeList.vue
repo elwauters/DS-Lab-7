@@ -44,6 +44,7 @@ function updateNode({ id, online }: { id: number; online: boolean }) {
   if (targetNode?.online && !online) {
     targetNode.nextId = 'N/A';
     targetNode.previousId = 'N/A';
+    targetNode.nodeId = 'N/A';
   }
 
   if (targetNode) {targetNode.online = online;}
