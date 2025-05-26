@@ -3,7 +3,7 @@
     <v-list-item height="88">
       <template v-slot:title>
         <v-card-title>
-          {{ node.name }}
+          {{ node.name }} - {{ node.nodeId }}
           <span style="" class="font-weight-light text-subtitle-2 text-grey">({{ node.ip}})</span>
         </v-card-title>
       </template>
