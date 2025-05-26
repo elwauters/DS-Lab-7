@@ -39,7 +39,7 @@
             </v-list-item>
           </v-list>
         </div>
-        <div class="mt-4">
+        <div class="mt-4 d-flex align-center gap-2">
           <v-file-input
             v-model="selectedFile"
             label="Upload a file"
@@ -48,14 +48,15 @@
             :multiple="false"
             dense
             outlined
+            hide-details
+            style="max-width: 300px;"
           ></v-file-input>
           <v-btn
             variant="text"
-            :disabled="!selectedFile"
-            class="mt-2"
+            :disabled="!selectedFile || selectedFile.length === 0"
             @click="uploadFile"
           >
-            Upload File
+            Upload
           </v-btn>
         </div>
 
@@ -178,7 +179,7 @@ async function uploadFile() {
   const formData = new FormData()
   formData.append('file', selectedFile.value[0])
 
-  const apiUrl = `/${props.nodeName}/node/file`
+  const apiUrl = `/${props.nodeName}/node/file/frontend`
   const result = await useApiCall(apiUrl, 'post', formData)
 
   if (result.success) {
