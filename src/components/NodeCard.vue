@@ -26,7 +26,7 @@
     <v-divider></v-divider>
     <v-card-actions>
       <v-btn variant="tonal" :color="'grey'"
-        @click="pingNode(node.name)"
+        @click="pingNode(node.name, node.id)"
       >
         <template v-slot:prepend>
           <v-icon icon="mdi-pulse" color="info"></v-icon>
@@ -48,7 +48,7 @@
         Shutdown
       </v-btn>
       <v-btn variant="tonal" :color="'grey'"
-        @click="getGlobalMap(node.name)">
+        @click="getGlobalMap(node.name, node.id)">
         <template v-slot:prepend>
           <v-icon icon="mdi-information" color="info"></v-icon>
         </template>
@@ -94,12 +94,15 @@ const emit = defineEmits<{
 
 
 
-async function pingNode(name: string) {
+async function pingNode(name: string, id: number) {
   const apiUrl = `/${name}/node/ping`;
   const result = await useApiCall(apiUrl, 'get')
   if (result.success) {
     emit('notify',`Node ${name} pinged successfully!`, 'success')
   } else {
+    if (result.error.includes("500")) {
+      handleUnreachableNode(id);
+    }
     emit('notify', `Failed to ping node ${name}: ${result.error}`, 'error')
   }
 }
@@ -112,6 +115,9 @@ async function startNode(name: string, id: number) {
     emit('update-node', { id: id, online: true });
     emit('update-np')
   } else {
+    if (result.error.includes("500")) {
+      handleUnreachableNode(id);
+    }
     emit('notify', `Failed to start node ${name}: ${result.error}`, 'error')
   }
 }
@@ -124,11 +130,14 @@ async function stopNode(name: string, id: number) {
     emit('update-node', { id: id, online: false });
     emit('update-np')
   } else {
+    if (result.error.includes("500")) {
+      handleUnreachableNode(id);
+    }
     emit('notify', `Failed to stop node ${name}: ${result.error}`, 'error')
   }
 }
 
-async function getGlobalMap(name: string) {
+async function getGlobalMap(name: string, id: number) {
   const apiUrl = `/${name}/agent/sync/filelist`;
   const result = await useApiCall(apiUrl, 'get')
   console.log(result)
@@ -137,7 +146,16 @@ async function getGlobalMap(name: string) {
     showDetails.value = true;
     emit('notify',`Fetched global map of ${name} successfully!`, 'success')
   } else {
+    if (result.error.includes("500")) {
+      handleUnreachableNode(id);
+    }
     emit('notify', `Failed to fetch global map for node ${name}: ${result.error}`, 'error')
+
   }
+}
+
+function handleUnreachableNode(id: number) {
+  emit('update-node', { id: id, online: false });
+  emit('update-np')
 }
 </script>

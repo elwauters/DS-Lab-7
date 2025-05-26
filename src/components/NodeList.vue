@@ -21,7 +21,7 @@
 <script lang="ts" setup>
 import NodeCard from './NodeCard.vue'
 import {Node} from "@/models/Node";
-import {reactive, ref} from "vue";
+import {ref} from "vue";
 import {useApiCall} from "@/composables/useApi";
 
 const emit = defineEmits<{
@@ -38,7 +38,6 @@ const nodes = ref<Node[]>([
 ]);
 
 function updateNode({ id, online }: { id: number; online: boolean }) {
-  console.log("updateNode in NodeList with: " + id + " and" + online)
   const targetNode = nodes.value.find(n => n.id === id);
 
   // If node that was online is being turned off
@@ -60,8 +59,6 @@ async function updateNextAndPrevious() {
     if (node.online) {
       const apiUrl = `/${node.name}/node/nextAndPrevious`;
       const result = await useApiCall(apiUrl, 'get')
-
-      console.log(result)
 
       if (result.success) {
         node.nextId = result.data.nextID;
