@@ -49,7 +49,7 @@
             dense
             outlined
             hide-details
-            style="max-width: 300px;"
+            style="max-width: 60%;"
           ></v-file-input>
           <v-btn
             variant="text"
