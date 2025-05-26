@@ -57,7 +57,7 @@ defineProps<{
 
 const emit = defineEmits<{
   (e: 'notify', message: string, color: string): void;
-  (e: 'update-node', value: { id: number, online: boolean }): void;
+  (e: 'update-status', value: { id: number, online: boolean }): void;
 }>();
 
 async function getServerMap(name: string) {

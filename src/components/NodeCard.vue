@@ -83,12 +83,13 @@ defineProps<{
     ip: string;
     nextId: string;
     previousId: string;
+    nodeId: number;
   };
 }>();
 
 const emit = defineEmits<{
   (e: 'notify', message: string, color: string): void;
-  (e: 'update-node', value: { id: number, online: boolean }): void;
+  (e: 'update-status', value: { id: number, online: boolean }): void;
   (e: 'update-np'): void
 }>();
 
@@ -112,7 +113,7 @@ async function startNode(name: string, id: number) {
   const result = await useApiCall(apiUrl, 'post')
   if (result.success) {
     emit('notify',`Node ${name} started successfully!`, 'success')
-    emit('update-node', { id: id, online: true });
+    emit('update-status', { id: id, online: true });
     emit('update-np')
   } else {
     if (result.error.includes("500")) {
@@ -127,7 +128,7 @@ async function stopNode(name: string, id: number) {
   const result = await useApiCall(apiUrl, 'delete')
   if (result.success) {
     emit('notify',`Node ${name} stopped successfully!`, 'success')
-    emit('update-node', { id: id, online: false });
+    emit('update-status', { id: id, online: false });
     emit('update-np')
   } else {
     if (result.error.includes("500")) {
@@ -154,25 +155,8 @@ async function getGlobalMap(name: string, id: number) {
   }
 }
 
-async function addNewFile(name: string, id: number, fileName: string) {
-  const apiUrl = `/${name}/node/`;
-  const result = await useApiCall(apiUrl, 'get')
-  console.log(result)
-  if (result.success) {
-    globalMap.value = result.data;
-    showDetails.value = true;
-    emit('notify',`Fetched global map of ${name} successfully!`, 'success')
-  } else {
-    if (result.error.includes("500")) {
-      handleUnreachableNode(id);
-    }
-    emit('notify', `Failed to fetch global map for node ${name}: ${result.error}`, 'error')
-
-  }
-}
-
 function handleUnreachableNode(id: number) {
-  emit('update-node', { id: id, online: false });
+  emit('update-status', { id: id, online: false });
   emit('update-np')
 }
 </script>
