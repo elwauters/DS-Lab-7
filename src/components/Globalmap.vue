@@ -50,7 +50,6 @@
           ></v-file-input>
           <v-btn
             :disabled="!selectedFile"
-            color="primary"
             class="mt-2"
             @click="uploadFile"
           >
@@ -169,6 +168,7 @@ async function releaseLock(filename: string) {
 }
 
 async function uploadFile() {
+  console.log(selectedFile.value)
   if (!selectedFile.value) {return}
 
   const formData = new FormData()
