@@ -45,10 +45,12 @@
             label="Upload a file"
             prepend-icon="mdi-upload"
             accept="*/*"
+            :multiple="false"
             dense
             outlined
           ></v-file-input>
           <v-btn
+            text
             :disabled="!selectedFile"
             class="mt-2"
             @click="uploadFile"
@@ -119,7 +121,7 @@ const emit = defineEmits<{
 
 const show = ref(props.modelValue)
 
-const selectedFile = ref<File | null>(null)
+const selectedFile = ref<File[] | null>(null)
 
 
 watch(() => props.modelValue, (val) => {
@@ -168,25 +170,23 @@ async function releaseLock(filename: string) {
 }
 
 async function uploadFile() {
-  console.log(selectedFile.value)
-  if (!selectedFile.value) {return}
+  if (!selectedFile.value || selectedFile.value.length === 0) {
+    emit('notify', 'No file selected', 'error')
+    return
+  }
 
   const formData = new FormData()
-  formData.append('file', selectedFile.value)
+  formData.append('file', selectedFile.value[0]) // ✅ use the first file
 
-  const apiUrl = `/${props.nodeName}/node/file`
+  const apiUrl = `/${props.nodeName}/file`
+  const result = await useApiCall(apiUrl, 'post', formData)
 
-  try {
-    const result = await useApiCall(apiUrl, 'post', formData)
-    if (result.success) {
-      emit('notify', `File uploaded successfully from ${props.nodeIp}`, 'success')
-      emit('reload-map', props.nodeName)
-      selectedFile.value = null // reset input
-    } else {
-      emit('notify', `Upload failed: ${result.error}`, 'error')
-    }
-  } catch (error: any) {
-    emit('notify', `Unexpected error: ${error.message}`, 'error')
+  if (result.success) {
+    emit('notify', `File uploaded successfully`, 'success')
+    emit('reload-map', props.nodeName)
+    selectedFile.value = null
+  } else {
+    emit('notify', `Upload failed: ${result.error}`, 'error')
   }
 }
 </script>
