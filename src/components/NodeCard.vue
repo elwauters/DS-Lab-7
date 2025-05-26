@@ -154,6 +154,23 @@ async function getGlobalMap(name: string, id: number) {
   }
 }
 
+async function addNewFile(name: string, id: number, fileName: string) {
+  const apiUrl = `/${name}/node/`;
+  const result = await useApiCall(apiUrl, 'get')
+  console.log(result)
+  if (result.success) {
+    globalMap.value = result.data;
+    showDetails.value = true;
+    emit('notify',`Fetched global map of ${name} successfully!`, 'success')
+  } else {
+    if (result.error.includes("500")) {
+      handleUnreachableNode(id);
+    }
+    emit('notify', `Failed to fetch global map for node ${name}: ${result.error}`, 'error')
+
+  }
+}
+
 function handleUnreachableNode(id: number) {
   emit('update-node', { id: id, online: false });
   emit('update-np')

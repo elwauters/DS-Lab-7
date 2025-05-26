@@ -39,6 +39,24 @@
             </v-list-item>
           </v-list>
         </div>
+        <div class="mt-4">
+          <v-file-input
+            v-model="selectedFile"
+            label="Upload a file"
+            prepend-icon="mdi-upload"
+            accept="*/*"
+            dense
+            outlined
+          ></v-file-input>
+          <v-btn
+            :disabled="!selectedFile"
+            color="primary"
+            class="mt-2"
+            @click="uploadFile"
+          >
+            Upload File
+          </v-btn>
+        </div>
 
         <v-divider class="my-4" v-if="ownedFiles.length > 0 && replicatedFiles.length > 0" />
 
@@ -102,6 +120,9 @@ const emit = defineEmits<{
 
 const show = ref(props.modelValue)
 
+const selectedFile = ref<File | null>(null)
+
+
 watch(() => props.modelValue, (val) => {
   show.value = val
 })
@@ -144,6 +165,28 @@ async function releaseLock(filename: string) {
     emit('reload-map', props.nodeName)
   } else {
     emit('notify', `Failed to release lock for ${filename}: ${result.error}`, 'error')
+  }
+}
+
+async function uploadFile() {
+  if (!selectedFile.value) {return}
+
+  const formData = new FormData()
+  formData.append('file', selectedFile.value)
+
+  const apiUrl = `/${props.nodeName}/node/file`
+
+  try {
+    const result = await useApiCall(apiUrl, 'post', formData)
+    if (result.success) {
+      emit('notify', `File uploaded successfully from ${props.nodeIp}`, 'success')
+      emit('reload-map', props.nodeName)
+      selectedFile.value = null // reset input
+    } else {
+      emit('notify', `Upload failed: ${result.error}`, 'error')
+    }
+  } catch (error: any) {
+    emit('notify', `Unexpected error: ${error.message}`, 'error')
   }
 }
 </script>
