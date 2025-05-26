@@ -39,7 +39,7 @@
             </v-list-item>
           </v-list>
         </div>
-        <div class="mt-4 d-flex align-center gap-2">
+        <div class="mt-4 d-flex align-center" style="width: 100%;">
           <v-file-input
             v-model="selectedFile"
             label="Upload a file"
@@ -49,12 +49,13 @@
             dense
             outlined
             hide-details
-            style="max-width: 60%;"
+            class="flex-grow-1 mr-2"
           ></v-file-input>
           <v-btn
             variant="text"
             :disabled="!selectedFile || selectedFile.length === 0"
             @click="uploadFile"
+            height="40"
           >
             Upload
           </v-btn>
