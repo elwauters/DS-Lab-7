@@ -50,7 +50,7 @@
             outlined
           ></v-file-input>
           <v-btn
-            text
+            variant="text"
             :disabled="!selectedFile"
             class="mt-2"
             @click="uploadFile"
@@ -176,9 +176,9 @@ async function uploadFile() {
   }
 
   const formData = new FormData()
-  formData.append('file', selectedFile.value[0]) // ✅ use the first file
+  formData.append('file', selectedFile.value[0])
 
-  const apiUrl = `/${props.nodeName}/file`
+  const apiUrl = `/${props.nodeName}/node/file`
   const result = await useApiCall(apiUrl, 'post', formData)
 
   if (result.success) {
